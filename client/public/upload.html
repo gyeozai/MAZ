@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAZ - Upload PicBook</title>
+    <link rel="icon" type="image/png" href="./img/logo-crop.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <div id="logo-1"><img src="./img/logo.png" style="width:8em; margin-top: 5px;"></div>
+        <div id="logo-2"><img src="./img/logo.png" style="width:8em; margin-top: 5px;"></div>
+        <nav>
+            <div class="nav-div" id="popular">popular</div>
+            <div class="nav-div" id="about">about</div>
+            <div class="nav-div" id="contact">contact</div>
+            <div class="profile-icon">
+                <div id="profile-pic"></div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div id="guest">Guest</div>
+                    <div id="username"></div>
+                    <hr style="margin-bottom: 15px;">
+                    <div id="profile">Profile</div>
+                    <div id="logout">Logout</div>
+                    <div id="login">Login</div>
+                    <div id="register-1">Register</div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <img src="./img/upload.png" style="width: 35%; position: fixed; top: 15%; left: 12%;">
+    <div class="upload-container" style="position: absolute; top: 15%; right: 20%;">
+        <div style="font-size: 1.5em; text-align: center; margin-bottom: 5px;">Upload PicBook</div>
+        <form id="uploadform" action="/api/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-input">
+                <label class="required-input" for="pdfupload">Upload PDF:</label><br>
+                <input type="file" id="pdfupload" name="pdfupload" accept="application/pdf" required>
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="name">Bookname:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="author">Author:</label>
+                <div id="addedAuthors"></div>
+                <input type="text" id="author" name="author">
+                <button type="button" onclick="appendAuthor()" style="margin-top: 5px; font-size: 13px; padding: 0 5px;">Add Author</button>
+                <button type="button" onclick="deleteAuthor()" style="margin-top: 5px; font-size: 13px; padding: 0 5px;">Delete All</button>
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="language">Language:</label>
+                <select id="language" name="language">
+                    <option value="Chinese">Chinese</option>
+                    <option value="English">English</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="theme"  class = "required-input">Theme:</label>
+                <div id="theme-input-container" class="theme-input-container">
+                    <div id="selected-tags" class="selected-themes"></div>
+                    <input type="hidden" id="theme" name="theme">
+                </div>
+                <div class="theme-buttons">
+                    <button type="button" class="theme-button" id="theme-2">Adventure</button>
+                    <button type="button" class="theme-button" id="theme-9">Art</button>
+                    <button type="button" class="theme-button" id="theme-3">Character</button>
+                    <button type="button" class="theme-button" id="theme-7">Emotions</button>
+                    <button type="button" class="theme-button" id="theme-1">Friendship</button>
+                    <button type="button" class="theme-button" id="theme-5">History</button>
+                    <button type="button" class="theme-button" id="theme-6">Imagination</button>
+                    <button type="button" class="theme-button" id="theme-11">Inspirational</button>
+                    <button type="button" class="theme-button" id="theme-4">Life Lessons</button>
+                    <button type="button" class="theme-button" id="theme-8">Nature</button>
+                    <button type="button" class="theme-button" id="theme-10">Science Fiction</button>
+                    <button type="button" class="theme-button" id="theme-12">Others</button>
+                </div>
+            </div>
+            <!-- use format of search -->
+            <!-- <div class="form-input">
+                <label id="categories" class="required-input" for="tags">Categories:</label>
+                <div id="selectedcategories"></div>
+                <select id="tags" name="tags" style="margin-top: 5px;">
+                    <option value="Friendship">Friendship</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Character">Character</option>
+                    <option value="Life Lessons">Life Lessons</option>
+                    <option value="History">History</option>
+                    <option value="Imagination">Imagination</option>
+                    <option value="Emotions">Emotions</option>
+                    <option value="Nature">Nature</option>
+                    <option value="Art">Art</option>
+                    <option value="Science Fiction">Science Fiction</option>
+                    <option value="Inspirational">Inspirational</option>
+                    <option value="Others">Others</option>
+                </select>
+                <br>
+                <button type="button" onclick="appendCategory()" style="margin-top: 5px; font-size: 13px; padding: 0 5px;">Add Category</button>
+                <button type="button" onclick="deleteCategory()" style="margin-top: 5px; font-size: 13px; padding: 0 5px;">Delete All</button>
+            </div> -->
+            <div class="form-input">
+                <label class="required-input" for="publisher">Publisher:</label>
+                <input type="text" id="publisher" name="publisher">
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="publish_date">Published on:</label>
+                <input type="date" id="publish_date" name="publish_date" max="9999-12-31">
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="translated_by">Translator:</label>
+                <input type="text" id="translated_by" name="translated_by">
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="page_count">Page Count:</label>
+                <input type="number" id="page_count" name="page_count" min="1" max="1000">
+            </div>
+            <div class="form-input">
+                <label class="required-input" for="isbn">ISBN:</label>
+                <input type="number" id="isbn" name="isbn" min="1000000000" max="9999999999999"d>
+            </div>
+            <div class="form-input">
+                <label class="optional-input" for="description">Description:</label>
+                <textarea id="upload-description" name="description"></textarea>
+            </div>
+            <button class="upload-button" type="submit">Upload</button>
+            <div id="done"></div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="../src/upload.js"></script>
+    <script src = "../src/url_redirection.js"></script>
+</body>
+</html>
+
+
